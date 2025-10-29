@@ -1,78 +1,78 @@
-# Uzhhorod Maps - Product Backlog
+# Uzhhorod Maps - Продуктовий беклог
 
-## MVP Features (Implemented ✅)
+## MVP Функції (Реалізовано ✅)
 
-1. **Interactive Map of Uzhhorod** ✅
-   - Full-screen interactive map centered on Uzhhorod, Ukraine
-   - Zoom and pan controls
-   - OpenStreetMap tile layer integration
-   - Responsive design for mobile and desktop
+1. **Інтерактивна карта Ужгорода** ✅
+   - Повноекранна інтерактивна карта, центрована на Ужгороді, Україна
+   - Контроли масштабування та переміщення
+   - Інтеграція з шаром OpenStreetMap
+   - Адаптивний дизайн для мобільних і десктопних пристроїв
 
-2. **Search by Street or Location** ✅
-   - Search bar with autocomplete suggestions
-   - Integration with Nominatim geocoding API
-   - Results filtered to Uzhhorod area
-   - Click-to-navigate to search results
+2. **Пошук за вулицею або місцем** ✅
+   - Пошуковий рядок з автозаповненням
+   - Інтеграція з API геокодування Nominatim
+   - Результати фільтруються для території Ужгорода
+   - Перехід до вибраного результату на карті
 
-3. **Route Drawing (Driving & Walking)** ✅
-   - Toggle between driving and walking modes
-   - Click-to-add waypoints on the map
-   - Automatic route calculation using OSRM
-   - Visual route display with different colors per mode
-   - Clear route functionality
+3. **Побудова маршруту (авто та пішки)** ✅
+   - Перемикання між режимами автомобільного та пішого руху
+   - Додавання точок маршруту кліком на карту
+   - Автоматичний розрахунок маршруту через OSRM
+   - Візуальне відображення маршруту різними кольорами для кожного режиму
+   - Можливість очищення маршруту
 
-4. **Current Location Detection** ✅
-   - Browser geolocation API integration
-   - Visual marker for user's current position
-   - Auto-center map on user location
-   - Location permission handling
+4. **Визначення поточного місцезнаходження** ✅
+   - Інтеграція з API геолокації браузера
+   - Відображення маркера поточного місця користувача
+   - Автоматичне центрування карти на користувачеві
+   - Обробка дозволів на визначення локації
 
-5. **Responsive UI with Shadcn/UI Components** ✅
-   - Clean, modern interface using Shadcn/UI
-   - Mobile-responsive controls and layout
-   - Accessible buttons and inputs
-   - Smooth animations and transitions
+5. **Адаптивний інтерфейс з компонентами Shadcn/UI** ✅
+   - Чистий, сучасний інтерфейс на базі Shadcn/UI
+   - Адаптивні елементи управління та макет
+   - Доступні кнопки та поля введення
+   - Плавні анімації та переходи
 
-## Future Features (Backlog)
+## Майбутні функції (Беклог)
 
-6. **Saved Locations & Favorites**
-   - Save frequently visited locations
-   - Create custom location lists
-   - Quick access to saved places
-   - Local storage persistence
+6. **Збережені локації та улюблені місця**
+   - Збереження часто відвідуваних локацій
+   - Створення власних списків місць
+   - Швидкий доступ до улюблених точок
+   - Збереження даних у локальному сховищі
 
-7. **Public Transport Integration**
-   - Display bus and trolleybus routes
-   - Real-time public transport tracking
-   - Schedule information
-   - Transit route planning
+7. **Інтеграція громадського транспорту**
+   - Відображення маршрутів автобусів і тролейбусів
+   - Відстеження транспорту в реальному часі
+   - Інформація про розклад
+   - Планування маршрутів громадським транспортом
 
-8. **Points of Interest (POI)**
-   - Display restaurants, cafes, and shops
-   - Filter POIs by category
-   - Detailed information cards
-   - User ratings and reviews
+8. **Точки інтересу (POI)**
+   - Відображення ресторанів, кафе та магазинів
+   - Фільтрація POI за категоріями
+   - Детальні інформаційні картки
+   - Оцінки та відгуки користувачів
 
-9. **Multi-Stop Route Planning**
-   - Add multiple waypoints to routes
-   - Optimize route order
-   - Estimated time and distance
-   - Alternative route suggestions
+9. **Планування маршрутів з кількома зупинками**
+   - Додавання кількох точок маршруту
+   - Оптимізація порядку зупинок
+   - Розрахунок часу та відстані
+   - Альтернативні варіанти маршрутів
 
-10. **Offline Map Support**
-    - Download map tiles for offline use
-    - Cached search results
-    - Offline routing capabilities
-    - Sync when back online
+10. **Підтримка офлайн-карт**
+    - Завантаження тайлів карти для офлайн-режиму
+    - Кешовані результати пошуку
+    - Можливість побудови маршрутів без інтернету
+    - Синхронізація після підключення до мережі
 
-11. **Share Location & Routes**
-    - Generate shareable links
-    - Share via social media
-    - QR code generation
-    - Export routes as GPX files
+11. **Поділитися локацією та маршрутами**
+    - Генерація посилань для спільного доступу
+    - Поширення через соціальні мережі
+    - Генерація QR-кодів
+    - Експорт маршрутів у форматі GPX
 
-12. **Dark Mode**
-    - Toggle between light and dark themes
-    - Automatic theme based on system preference
-    - Dark map tiles for night viewing
-    - Reduced eye strain for night use
+12. **Темна тема**
+    - Перемикання між світлою та темною темами
+    - Автоматичне визначення теми за налаштуваннями системи
+    - Темні тайли карти для нічного перегляду
+    - Менше навантаження на очі вночі
