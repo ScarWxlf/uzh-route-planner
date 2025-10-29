@@ -1,78 +1,40 @@
-# Uzhhorod Maps - Product Backlog
+## Загальний беклог (10–12 завдань)
 
-## MVP Features (Implemented ✅)
+| № | Завдання | Опис | Тип |
+|---|-----------|------|-----|
+| 1 | Ініціалізація проєкту (frontend + backend) | Налаштувати базову структуру проєкту (Next.js / Django), інтегрувати Git та CI. | Technical |
+| 2 | Інтеграція з OpenStreetMap API | Підключити OSM для отримання даних про дороги та геокоординати. | Backend |
+| 3 | Алгоритм пошуку найкоротшого шляху | Реалізувати алгоритм Dijkstra або A* для обчислення маршруту. | Backend |
+| 4 | Інтерфейс вибору точок на карті | Додати інтерактивну мапу, на якій користувач обирає старт і фініш. | Frontend |
+| 5 | Візуалізація маршруту | Побудувати лінію маршруту між вибраними точками на мапі. | Frontend |
+| 6 | Відображення відстані та часу подорожі | Показати користувачу загальну довжину маршруту та орієнтовний час. | Fullstack |
+| 7 | Збереження історії пошуків | Зберігати останні маршрути користувача в локальному сховищі. | Frontend |
+| 8 | Вибір типу маршруту | Реалізувати фільтри (пішохідний, автомобільний, велосипедний). | Backend |
+| 9 | Оптимізація для мобільних пристроїв | Адаптивна верстка та UX для смартфонів. | Frontend |
+| 10 | Деплой на сервер | Налаштувати продакшн-деплой на Render або DigitalOcean. | DevOps |
+| 11 | Документація API | Створити Swagger-документацію для бекенду. | Backend |
+| 12 | Тестування та відлагодження | Написати базові юніт-тести та протестувати маршрути. | Fullstack |
 
-1. **Interactive Map of Uzhhorod** ✅
-   - Full-screen interactive map centered on Uzhhorod, Ukraine
-   - Zoom and pan controls
-   - OpenStreetMap tile layer integration
-   - Responsive design for mobile and desktop
+---
 
-2. **Search by Street or Location** ✅
-   - Search bar with autocomplete suggestions
-   - Integration with Nominatim geocoding API
-   - Results filtered to Uzhhorod area
-   - Click-to-navigate to search results
+## Поточний спринт (2 тижні)
 
-3. **Route Drawing (Driving & Walking)** ✅
-   - Toggle between driving and walking modes
-   - Click-to-add waypoints on the map
-   - Automatic route calculation using OSRM
-   - Visual route display with different colors per mode
-   - Clear route functionality
+**Тривалість:** 14 днів  
+**Ціль:** створити робочу версію MVP із можливістю побудови маршруту між двома точками.
 
-4. **Current Location Detection** ✅
-   - Browser geolocation API integration
-   - Visual marker for user's current position
-   - Auto-center map on user location
-   - Location permission handling
+**Вибрані завдання:**
+1. Ініціалізація проєкту (frontend + backend)  
+2. Інтеграція з OpenStreetMap API  
+3. Алгоритм пошуку найкоротшого шляху  
+4. Інтерфейс вибору точок на карті  
+5. Візуалізація маршруту
 
-5. **Responsive UI with Shadcn/UI Components** ✅
-   - Clean, modern interface using Shadcn/UI
-   - Mobile-responsive controls and layout
-   - Accessible buttons and inputs
-   - Smooth animations and transitions
+---
 
-## Future Features (Backlog)
+**Результат:**  
+Є перша робоча версія MVP. Користувач може обрати дві точки та побачити маршрут.
 
-6. **Saved Locations & Favorites**
-   - Save frequently visited locations
-   - Create custom location lists
-   - Quick access to saved places
-   - Local storage persistence
-
-7. **Public Transport Integration**
-   - Display bus and trolleybus routes
-   - Real-time public transport tracking
-   - Schedule information
-   - Transit route planning
-
-8. **Points of Interest (POI)**
-   - Display restaurants, cafes, and shops
-   - Filter POIs by category
-   - Detailed information cards
-   - User ratings and reviews
-
-9. **Multi-Stop Route Planning**
-   - Add multiple waypoints to routes
-   - Optimize route order
-   - Estimated time and distance
-   - Alternative route suggestions
-
-10. **Offline Map Support**
-    - Download map tiles for offline use
-    - Cached search results
-    - Offline routing capabilities
-    - Sync when back online
-
-11. **Share Location & Routes**
-    - Generate shareable links
-    - Share via social media
-    - QR code generation
-    - Export routes as GPX files
-
-12. **Dark Mode**
-    - Toggle between light and dark themes
-    - Automatic theme based on system preference
-    - Dark map tiles for night viewing
-    - Reduced eye strain for night use
+**Наступні кроки:**  
+- Додати типи маршрутів (пішохідний/автомобільний).  
+- Відображати довжину маршруту й час.  
+- Оптимізувати продуктивність.
