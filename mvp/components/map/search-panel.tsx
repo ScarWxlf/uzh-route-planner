@@ -49,7 +49,8 @@ export function SearchPanel({
   onEndClear,
   onProfileChange,
 }: SearchPanelProps) {
-  const hasFallback = route?.fallback || (route?.warnings && route.warnings.length > 0)
+  const hasFallback = Boolean(route?.fallback || route?.warnings?.length)
+
 
   return (
     <div className="absolute top-4 left-4 right-4 md:left-4 md:right-auto z-[1000]">
@@ -100,7 +101,8 @@ export function SearchPanel({
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : route ? (
                 <>
-                  <span className={cn("font-semibold", profile === "walk" ? "text-green-600" : "text-blue-600")}>
+                  <span className={cn("font-semibold", (route.profile ?? profile) === "walk" ? "text-green-600" : "text-blue-600"
+)}>
                     {formatDistance(route.distance)}
                   </span>
                   <span className="text-muted-foreground">•</span>

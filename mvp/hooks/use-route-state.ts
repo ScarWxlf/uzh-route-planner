@@ -141,7 +141,17 @@ export function useRouteState() {
     window.history.replaceState({}, "", window.location.pathname)
   }, [])
 
-  const locateUser = useCallback(() => {
+  const locateUser = useCallback(async () => {
+    // 1) Secure context check
+    if (typeof window !== "undefined" && !window.isSecureContext) {
+      toast({
+        title: "Геолокація заблокована",
+        description: "Потрібен HTTPS (або localhost). Відкрийте застосунок через https://",
+        variant: "destructive",
+      })
+      return
+    }
+
     if (!navigator.geolocation) {
       toast({
         title: "Геолокація недоступна",
@@ -151,33 +161,84 @@ export function useRouteState() {
       return
     }
 
-    setIsLoadingLocation(true)
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords
-        setUserLocation({ lat: latitude, lon: longitude })
-        setIsLoadingLocation(false)
+    // 2) Permission pre-check (якщо доступно)
+    try {
+      // @ts-expect-error Permissions API types differ in some TS libs
+      const perm = await navigator.permissions?.query?.({ name: "geolocation" })
+      if (perm?.state === "denied") {
         toast({
-          title: "Місцезнаходження знайдено",
-          description: "Ваше місцезнаходження визначено",
-        })
-      },
-      (error) => {
-        setIsLoadingLocation(false)
-        let message = "Не вдалося визначити місцезнаходження"
-        if (error.code === error.PERMISSION_DENIED) {
-          message = "Доступ до геолокації заборонено"
-        }
-        toast({
-          title: "Помилка геолокації",
-          description: message,
+          title: "Доступ до геолокації заборонено",
+          description: "Дозвольте геолокацію в налаштуваннях браузера для цього сайту і спробуйте ще раз.",
           variant: "destructive",
         })
-      },
-      { enableHighAccuracy: true, timeout: 10000 },
-    )
+        return
+      }
+    } catch {
+      // ignore
+    }
+
+    setIsLoadingLocation(true)
+
+    const getPos = (opts: PositionOptions) =>
+      new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, opts)
+      })
+
+    const optionsHigh: PositionOptions = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+    const optionsLow: PositionOptions = { enableHighAccuracy: false, timeout: 20000, maximumAge: 60000 }
+
+    try {
+      // 3) First try: high accuracy
+      const position = await getPos(optionsHigh)
+      const { latitude, longitude } = position.coords
+
+      setUserLocation({ lat: latitude, lon: longitude })
+      // ✅ щоб карта реально центрнулась після визначення
+      setUIState((prev) => ({ ...prev, followMe: true }))
+
+      toast({
+        title: "Місцезнаходження знайдено",
+        description: "Ваше місцезнаходження визначено",
+      })
+    } catch (error: any) {
+      // 4) Retry: low accuracy (часто рятує десктоп/wi-fi)
+      const code = error?.code
+      const isRetryable =
+        code === error?.TIMEOUT || code === error?.POSITION_UNAVAILABLE
+
+      if (isRetryable) {
+        try {
+          const position = await getPos(optionsLow)
+          const { latitude, longitude } = position.coords
+
+          setUserLocation({ lat: latitude, lon: longitude })
+          setUIState((prev) => ({ ...prev, followMe: true }))
+
+          toast({
+            title: "Місцезнаходження знайдено",
+            description: "Використано приблизну локацію",
+          })
+          return
+        } catch {
+          // fallthrough to final error toast below
+        }
+      }
+
+      let message = "Не вдалося визначити місцезнаходження"
+      if (code === error?.PERMISSION_DENIED) message = "Доступ до геолокації заборонено"
+      if (code === error?.POSITION_UNAVAILABLE) message = "Локація недоступна (перевірте GPS/Wi-Fi)"
+      if (code === error?.TIMEOUT) message = "Час очікування вичерпано — спробуйте ще раз"
+
+      toast({
+        title: "Помилка геолокації",
+        description: message,
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoadingLocation(false)
+    }
   }, [toast])
+
 
   const setUserLocationAsStart = useCallback(() => {
     if (userLocation) {

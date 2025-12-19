@@ -48,6 +48,32 @@ interface RoutePanelProps {
   onTogglePanel: () => void
 }
 
+const WALK_SPEED_M_S = 1.4
+
+function getDisplayedStepSeconds(stepDistance: number, stepDuration: number, profile: "car" | "walk") {
+  if (profile !== "walk") return stepDuration
+
+  const estimated = stepDistance / WALK_SPEED_M_S
+  return Math.max(5, Math.round(Math.max(stepDuration, estimated)))
+}
+
+
+function formatStepDuration(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds <= 0) return "—"
+
+  if (seconds < 60) {
+    return `${Math.round(seconds)} с`
+  }
+
+  const minutes = Math.round(seconds / 60)
+  if (minutes < 60) return `${minutes} хв`
+
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return `${hours} год ${mins} хв`
+}
+
+
 function formatDistance(meters: number): string {
   if (meters < 1000) {
     return `${Math.round(meters)} м`
@@ -65,27 +91,37 @@ function formatDuration(seconds: number): string {
   return `${hours} год ${mins} хв`
 }
 
-function RouteSteps({ steps }: { steps: RouteData["steps"] }) {
+function RouteSteps({
+  steps,
+  profile,
+}: {
+  steps: RouteData["steps"]
+  profile: "car" | "walk"
+}) {
+  
   if (!steps || steps.length === 0) {
     return <p className="text-sm text-muted-foreground py-4 text-center">Покрокові інструкції недоступні</p>
   }
 
   return (
     <div className="space-y-2">
-      {steps.map((step, index) => (
-        <div key={index} className="flex gap-3 p-2 rounded-md hover:bg-accent/50">
-          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
-            {index + 1}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm">{step.instruction}</p>
-            {step.name && <p className="text-xs text-muted-foreground">{step.name}</p>}
-            <p className="text-xs text-muted-foreground">
-              {formatDistance(step.distance)} • {formatDuration(step.duration)}
-            </p>
-          </div>
+      {steps.map((step, index) => {
+        const seconds = getDisplayedStepSeconds(step.distance, step.duration, profile)
+
+        return (
+          <div key={index} className="flex gap-3 p-2 rounded-md hover:bg-accent/50">
+            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
+              {index + 1}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm">{step.instruction}</p>
+              {step.name && <p className="text-xs text-muted-foreground">{step.name}</p>}
+              <p className="text-xs text-muted-foreground">
+                {formatDistance(step.distance)} • {formatStepDuration(seconds)}
+              </p>
+            </div>
         </div>
-      ))}
+      )})}
     </div>
   )
 }
@@ -159,24 +195,28 @@ function PanelContent({
         onValueChange={(v) => onActiveTabChange(v as UIState["activeTab"])}
         className="flex-1 flex flex-col"
       >
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="route" className="text-xs">
-            <Route className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Маршрут</span>
-          </TabsTrigger>
-          <TabsTrigger value="saved" className="text-xs">
-            <Star className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Збережені</span>
-          </TabsTrigger>
-          <TabsTrigger value="recent" className="text-xs">
-            <Clock className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Останні</span>
-          </TabsTrigger>
-          <TabsTrigger value="transit" className="text-xs">
-            <Bus className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Транспорт</span>
-          </TabsTrigger>
-        </TabsList>
+        <TabsList className="grid w-full grid-cols-2 gap-1 h-auto p-1">
+  <TabsTrigger value="route" className="h-10 w-full text-xs justify-center">
+    <Route className="h-4 w-4 mr-1" />
+    <span className="hidden sm:inline">Маршрут</span>
+  </TabsTrigger>
+
+  <TabsTrigger value="saved" className="h-10 w-full text-xs justify-center">
+    <Star className="h-4 w-4 mr-1" />
+    <span className="hidden sm:inline">Збережені</span>
+  </TabsTrigger>
+
+  <TabsTrigger value="recent" className="h-10 w-full text-xs justify-center">
+    <Clock className="h-4 w-4 mr-1" />
+    <span className="hidden sm:inline">Останні</span>
+  </TabsTrigger>
+
+  <TabsTrigger value="transit" className="h-10 w-full text-xs justify-center">
+    <Bus className="h-4 w-4 mr-1" />
+    <span className="hidden sm:inline">Транспорт</span>
+  </TabsTrigger>
+</TabsList>
+
 
         <TabsContent value="route" className="flex-1 flex flex-col mt-4 overflow-hidden">
           {/* Route summary */}
@@ -199,16 +239,18 @@ function PanelContent({
                   <span>{route.warnings![0]}</span>
                 </div>
               )}
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={onReversePoints}>
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" variant="outline" onClick={onReversePoints} className="flex-1 min-w-[140px]">
                   <ArrowRightLeft className="h-4 w-4 mr-1" />
                   Розвернути
                 </Button>
-                <Button size="sm" variant="outline" onClick={onShare}>
+
+                <Button size="sm" variant="outline" onClick={onShare} className="flex-1 min-w-[140px]">
                   <Share2 className="h-4 w-4 mr-1" />
                   Поділитися
                 </Button>
-                <Button size="sm" variant="destructive" onClick={onClearRoute}>
+
+                <Button size="sm" variant="destructive" onClick={onClearRoute} className="flex-1 min-w-[140px]">
                   <Trash2 className="h-4 w-4 mr-1" />
                   Очистити
                 </Button>
@@ -269,7 +311,7 @@ function PanelContent({
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
               </div>
             ) : route ? (
-              <RouteSteps steps={route.steps} />
+              <RouteSteps steps={route.steps} profile={(route.profile ?? "car") as "car" | "walk"} />
             ) : (
               <div className="text-center py-8 text-muted-foreground">
                 <Navigation className="h-12 w-12 mx-auto mb-2 opacity-50" />

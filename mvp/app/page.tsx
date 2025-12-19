@@ -1,9 +1,5 @@
-import MapView from "@/components/map-view"
+import { MapShell } from "@/components/map/map-shell"
 
 export default function Home() {
-  return (
-    <main className="h-screen w-full overflow-hidden">
-      <MapView />
-    </main>
-  )
+  return <MapShell />
 }

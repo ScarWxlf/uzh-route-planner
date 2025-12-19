@@ -20,6 +20,23 @@ const MapView = dynamic(() => import("./map-view"), {
   ),
 })
 
+function makeLabel(result: GeocodingResult): string {
+  const parts = result.displayName.split(",").map((s) => s.trim()).filter(Boolean)
+  if (parts.length === 0) return "Локація"
+
+  const first = parts[0]
+  const second = parts[1] ?? ""
+
+  // якщо перша частина — лише число (номер будинку), то "Road, number"
+  if (/^\d+[A-Za-zА-Яа-яІіЇїЄєҐґ-]*$/.test(first) && second) {
+    return `${second}, ${first}` // "вулиця Олександра Хіри, 4"
+  }
+
+  // інакше — як було
+  return first
+}
+
+
 export function MapShell() {
   const { appState, uiState, savedPlaces, recentRoutes, waypoints, poiEnabled, poiCategories, actions } =
     useRouteState()
@@ -32,7 +49,7 @@ export function MapShell() {
       actions.setStart({
         lat: result.lat,
         lon: result.lon,
-        label: result.displayName.split(",")[0],
+        label: makeLabel(result),
         placeId: result.placeId,
       })
     },
@@ -44,7 +61,7 @@ export function MapShell() {
       actions.setEnd({
         lat: result.lat,
         lon: result.lon,
-        label: result.displayName.split(",")[0],
+        label: makeLabel(result),
         placeId: result.placeId,
       })
     },

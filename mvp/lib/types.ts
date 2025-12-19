@@ -38,14 +38,22 @@ export interface RouteStep {
 }
 
 export interface RouteData {
-  geometry: GeoJSON.LineString
-  distance: number // meters
-  duration: number // seconds
-  steps: RouteStep[]
+  geometry: {
+    type: "LineString"
+    coordinates: number[][]
+  }
+  distance: number
+  duration: number
+
+  // ✅ add these (because API returns them)
+  profile?: RouteProfile          // "car" | "walk"
   provider?: "osrm" | "ors"
   warnings?: string[]
   fallback?: boolean
+
+  steps?: RouteStep[]
 }
+
 
 export type RouteProfile = "car" | "walk"
 
